@@ -39,40 +39,83 @@
 
 <body>
     <div id="root" class="my-background d-flex flex-column flex-grow-1 main-wrapper ">
-        <div class="d-flex flex-column flex-grow-1 ">
 
+
+        <!-- 
             <div class="d-flex flex-row flex-grow-0  justify-content-center ">
 
-                <div class="d-flex flex-row flex-grow-1 bg-white justify-content-center align-items-center">
+                <div class="d-flex flex-column flex-grow-1 bg-white justify-content-center align-items-center">
 
-                    <div class="flex-row number-font">
-                        <h3 id="formsclock">10 min &nbsp;</h3>
+                    <div class="d-flex bd-highlight">
+                        <div class="p-2 flex-fill bd-highlight">Flex item with a lot of content</div>
+                        <div class="p-2 flex-fill bd-highlight">Flex item</div>
+                        <div class="p-2 flex-fill bd-highlight">Flex item</div>
+                      </div>
+
+
+                    <div class="d-flex flex-row flex-grow-1">
+                        <div class="p-2 flex-fill number-font">
+                            <h3 id="formsclock">未設定 &nbsp;</h3>
+                        </div>
+
+                        <div class="p-2 flex-fill bg-whith" style="width:50%">
+
+                            <div class="progress ">
+                                <div id="formsbar"
+                                    class="progress-bar progress-bar-striped progress-bar-animated my-color"
+                                    style="width:40%"></div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="flex-column bg-whith" style="width:50%">
-
-                        <div class="progress ">
-                            <div id="formsbar" class="progress-bar progress-bar-striped progress-bar-animated my-color" style="width:40%"></div>
-                          </div>
-                    </div>
 
 
                 </div>
-            </div>
-            <div class="d-flex flex-row " >
-                <h6 id="info" class="text-center" hidden></h6>
-            </div>
-
-            <iframe class="d-flex flex-grow-1" id="formsframe"
-                src="https://docs.google.com/forms/d/e/1FAIpQLSean7gSYtmX6Wbq41U8sxrB1Qv5dvFtYhngBylqw0G-Z49o-A/viewform?embedded=true"
-                frameborder="0">載入中…</iframe>
+            </div>-->
 
 
+        <div class="bg-white  w-100  d-flex flex-column  align-items-stretch ">
+
+                <div class="">
+                    <div class="d-flex align-items-center flex-row"  style="max-width: 720px; margin-left: auto;margin-right: auto;">
+
+                        <div class="p-2 number-font">
+                            <h5 id="formsclock">未設定 &nbsp;</h5>
+                        </div>
+                        <div class="p-2 flex-grow-1">
+                            <div class="progress" style="height:25px;">
+                                <div id="formsbar"
+                                    class="progress-bar progress-bar-striped progress-bar-animated my-color"
+                                    style="width:40%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center flex-row"  style="max-width: 720px; margin-left: auto;margin-right: auto;">
+
+                        <div class="p-2 number-font">
+                            <h6 id="levelclock">未開始 &nbsp;</h6>
+                        </div>
+                        <div class="p-2 flex-grow-1">
+                            <div class="progress" style="height:15px;">
+                                <div id="levelbar"
+                                    class="progress-bar progress-bar-striped progress-bar-animated my-color"
+                                    style="width:0%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         </div>
 
 
 
 
+        <div class="">
+            <h6 id="info" class="text-center" hidden></h6>
+        </div>
+
+        <iframe class="flex-grow-1" id="formsframe"
+            src="https://docs.google.com/forms/d/e/1FAIpQLScs1kWc5j6IgiS_mj8aR_5QOCk7ggXGMjCkZ3w54BTn4JcLTw/viewform?embedded=true"
+            frameborder="0">載入中…</iframe>
     </div>
 
 </body>
@@ -101,30 +144,49 @@
         let now = new Date();
 
 
+
+        if(now.getTime() > endtime.getTime()) {
+            levelclock.innerHTML = "第 " + levelnum + " 頁結束倒數 00:00 &nbsp;";
+            levelbar.style = "width:0%";
+        }
+        else if (now.getTime() > starttime.getTime()) {
+            let leveldelta = (endtime.getTime() - now.getTime())  / 1000;
+            
+            let levelclock = document.getElementById("levelclock");
+            let levelbar = document.getElementById("levelbar");
+            let level = levelnum - Math.floor(leveldelta / (delta * 60));
+
+            let levelleft = leveldelta % (delta * 60);
+
+
+            let minleft = String(Math.floor(levelleft / 60)).padStart(2, '0');
+            let secleft = String(Math.floor(levelleft % 60)).padStart(2, '0');
+
+            levelclock.innerHTML = `第 ${level+1} 頁結束倒數 ${minleft}:${secleft} &nbsp;`;
+            levelbar.style = "width:" + ((levelleft * 100 / (delta * 60))) + "%";
+        }
+
+
         let timeallsec = delta * levelnum * 60;
         let timeleftsec = Math.max(0, (endtime.getTime() - now.getTime()) / 1000);
 
         let formsclock = document.getElementById("formsclock");
 
-        if(now.getTime() < starttime.getTime()) {
+        if (now.getTime() < starttime.getTime()) {
             timeallsec = 10 * 60;
-            timeleftsec = -(now.getTime() - starttime.getTime()) /1000;
+            timeleftsec = -(now.getTime() - starttime.getTime()) / 1000;
 
-            let minleft = String(Math.floor(timeleftsec/60)).padStart(2, '0');
-            let secleft = String(Math.floor(timeleftsec%60)).padStart(2, '0');
+            let minleft = String(Math.floor(timeleftsec / 60)).padStart(2, '0');
+            let secleft = String(Math.floor(timeleftsec % 60)).padStart(2, '0');
 
-            formsclock.innerHTML = `開啟倒數 ${minleft}:${secleft} &nbsp;`;
+            formsclock.innerHTML = `表單開始倒數 ${minleft}:${secleft} &nbsp;`;
         } else {
             timeleftsec = Math.max(0, (endtime.getTime() - now.getTime()) / 1000);
-            let minleft = String(Math.floor(timeleftsec/60)).padStart(2, '0');
-            let secleft = String(Math.floor(timeleftsec%60)).padStart(2, '0');
+            let minleft = String(Math.floor(timeleftsec / 60)).padStart(2, '0');
+            let secleft = String(Math.floor(timeleftsec % 60)).padStart(2, '0');
 
-            formsclock.innerHTML = `關閉倒數 ${minleft}:${secleft} &nbsp;`;
+            formsclock.innerHTML = `表單結束倒數 ${minleft}:${secleft} &nbsp;`;
         }
-
-
-
-
 
         // Math.max(0, Math.floor(timeleftsec/60)) + " min &nbsp;";
         let formsbar = document.getElementById("formsbar");
@@ -136,9 +198,9 @@
         console.log(((timeleftsec / timeallsec) * 100));
     }
 
-    setInterval(function() {
+    setInterval(function () {
         checktime();
-    }, 1000);
+    }, 500);
     checktime();
 
 </script>
