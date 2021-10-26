@@ -131,8 +131,10 @@
     var timestruct = JSON.parse(atob(ts));
     var formsframe = document.getElementById("formsframe");
     formsframe.src = "https://docs.google.com/forms/d/e/" + timestruct[0] + "/viewform?embedded=true";
-
-
+    if (timestruct[4]) {
+        document.title = timestruct[4];
+    }
+    console.log(timestruct);
 
     function checktime() {
         let timestruct = window.timestruct;
@@ -194,8 +196,8 @@
 
         let info = document.getElementById("info");
         info.innerText = `開始時間: ${starttime} \n結束時間: ${endtime} \n每區段間格: ${delta} 間格數量: ${levelnum}`
-        console.log(timeleftsec + "/" + timeallsec);
-        console.log(((timeleftsec / timeallsec) * 100));
+        // console.log(timeleftsec + "/" + timeallsec);
+        // console.log(((timeleftsec / timeallsec) * 100));
     }
 
     setInterval(function () {
