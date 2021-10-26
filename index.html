@@ -122,10 +122,10 @@
 
 </html>
 <script>
-    queryString = window.location.search;
+    let queryString = window.location.search;
     console.log(queryString);
-    urlParams = new URLSearchParams(queryString);
-    ts = urlParams.get("ts");
+    let urlParams = new URLSearchParams(queryString);
+    let ts = urlParams.get("ts");
 
     // WyIxRkFJcFFMU2NzMWtXYzVqNklnaVNfbWo4YVJfNVFPQ2s3Z2dYR01qQ2taM3c1NEJUbjRKY0xUdyIsMTYzMTE5MzMwMDAwMCw1LDNd
     var timestruct = JSON.parse(atob(ts));
@@ -135,6 +135,11 @@
         document.title = timestruct[4];
     }
     console.log(timestruct);
+
+    let title = urlParams.get("title");
+    if (title) {
+        document.title = title;
+    }
 
     function checktime() {
         let timestruct = window.timestruct;
